@@ -48,7 +48,7 @@ filenames = [f for f in os.listdir(dirname) if os.path.isfile(dirname + f) and o
 stopset = set(stopwords.words('english'))
 print "len" + str(len(filenames))
 
-for filename in filenames[:1]:
+for filename in filenames:
     with open(dirname + filename,'r') as f:
         text = re.sub(r"[\W]", " ", f.read())
         tokens = nltk.word_tokenize(text.lower())
@@ -68,7 +68,7 @@ for key,value in dic.iteritems():
     print key + "\t" + str(value)
     
 #pickle.dump(dic,open("dic.txt",'w'), pickle.HIGHEST_PROTOCOL)
-cPickle.dump(dic,open("dic.dat",'w'), pickle.HIGHEST_PROTOCOL)
+cPickle.dump(dic,open("dic.dat",'w'), cPickle.HIGHEST_PROTOCOL)
 
 
 # testq = "understand retirees representative"
