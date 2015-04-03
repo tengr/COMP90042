@@ -53,7 +53,7 @@ for filename in filenames:
         text = re.sub(r"[\W]", " ", f.read())
         tokens = nltk.word_tokenize(text.lower())
         for token in tokens:
-            if token not in stopset:
+            if token not in stopset: #comment this line time becomes 5:57
                 word = stemmer.stem(token.decode('utf8', 'ignore'))
                 if word in dic:
                     if filename in dic[word]:
@@ -64,11 +64,13 @@ for filename in filenames:
                     dic[word] = {}
                     dic[word][filename] = 1
 
-for key,value in dic.iteritems():
-    print key + "\t" + str(value)
+# for key,value in dic.iteritems():
+#     print key + "\t" + str(value)
     
 #pickle.dump(dic,open("dic.txt",'w'), pickle.HIGHEST_PROTOCOL)
 cPickle.dump(dic,open("dic.dat",'w'), cPickle.HIGHEST_PROTOCOL)
+
+
 
 
 # testq = "understand retirees representative"

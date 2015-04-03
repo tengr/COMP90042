@@ -24,8 +24,8 @@ doc_len = {}
 for word in dic:
     nt = len(dic[word])
     for doc, freq in dic[word].iteritems():
-        idf = math.log(N * 1.0 / nt)
-        tfidf = math.log(freq + 1) * idf
+        idf = 1.0 / nt
+        tfidf = freq * idf
         if doc not in doc_len:
             doc_len[doc] = tfidf ** 2
         else:
@@ -44,8 +44,8 @@ for each_query in q_num:
         if word in dic:
             nt = len(dic[word])
             for doc, freq in dic[word].iteritems():
-                idf = math.log(N * 1.0 / nt)
-                tfidf = math.log(freq + 1) * idf
+                idf = 1.0 / nt
+                tfidf = freq * idf
                 if doc not in score:
                     score[doc] = tfidf
                 else:
