@@ -1,5 +1,46 @@
+import matplotlib.pyplot as plt
 ans = {} 
 res = {}
+def precision_at(n, cmd):
+    TP = 0
+    for query_num in ans:
+        resN = res[query_num][:n] #top N of result res[]
+        numRel = len( set(resN) & set(ans[query_num]) )
+        TP += numRel
+        presN = numRel * 1.0 / n
+        if cmd == 'print':
+            print str(query_num) + "\t" + str(presN) + "\n"
+        
+    precision = TP / (len(ans) * n * 1.0)
+    if cmd == 'print':
+        print "TP = " + str(TP)    
+        print "queries = " + str(len(ans))  
+        print "overall precision = " + str(precision)
+    return precision
+
+def recall_at(n, cmd):
+    TP = 0
+    for query_num in ans:
+        resN = res[query_num][:n] #top N of result res[]
+        numRel = len( set(resN) & set(ans[query_num]) )
+        TP += numRel
+        recN = numRel * 1.0 / len(ans[query_num])
+        if cmd == 'print':
+            print str(query_num) + "\t" + str(recN) + "\n"
+        
+    recall = TP * 1.0 / sum(len(v) for v in ans.itervalues())
+    if cmd == 'print':
+        print 'total recall = ' + str(recall)
+    return recall
+
+
+
+def plot_arr(arr, xlbl, ylbl):
+    plt.plot(arr)
+    plt.ylabel('precision')
+    plt.xlabel('top')
+    plt.show()
+
 with open('/Users/ruichen/Documents/COMP90042/proj1/proj1data/qrels.february','r') as f1:
     for line in f1:
         arr = line.split()
@@ -23,24 +64,12 @@ with open('/Users/ruichen/Documents/workspace/IR/tengr/rankings.txt', 'r') as f2
             res[query_num].append(filename)
         else:
             res[query_num] = [filename]
-# for query_num in ans:
-#     print str(query_num) + "\t" + str(len(set(res[query_num]) & set(ans[query_num])))
 
-#top 10
-TP = 0
-for query_num in ans:
-    #ans10 = ans[query_num][:10]
-    res10 = res[query_num][:10]
-    #print ans[query_num]
-    rel_num = len( set(res10) & set(ans[query_num]) )
-    #print str(rel_num)
-    TP += rel_num
-    pres10 = rel_num / 10.0
-    print str(query_num) + "\t" + str(pres10) + "\n"
+pre_arr = [] 
+rec_arr = []           
+for i in xrange(10,101):
+    pre_arr.append(precision_at(i, ''))
+    rec_arr.append(recall_at(i, ''))
+plt.plot(pre_arr, rec_arr, 'ro')
+plt.show()
     
-precision = TP / (len(ans) * 10.0)
-
-print "TP = " + str(TP)
- 
-print "queries = " + str(len(ans))  
-print "overall precision = " + str(precision)
