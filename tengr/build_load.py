@@ -110,4 +110,3 @@ def check_queries():
         len_list.append(len(q.split()))
     return Counter(len_list)
 
-build_ii_bi()
