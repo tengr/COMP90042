@@ -47,7 +47,7 @@ with open('/Users/ruichen/Documents/COMP90042/proj1/proj1data/qrels.february','r
         query_num = arr[0]
         relevance = int(arr[-1])
         filename = arr[2]
-        if relevance > 0:
+        if relevance >= 1:
             if query_num in ans:
                 ans[query_num].append(filename)
             else:
@@ -67,9 +67,12 @@ with open('/Users/ruichen/Documents/workspace/IR/tengr/rankings.txt', 'r') as f2
 
 pre_arr = [] 
 rec_arr = []           
-for i in xrange(10,101):
+for i in xrange(10,50):
     pre_arr.append(precision_at(i, ''))
     rec_arr.append(recall_at(i, ''))
-plt.plot(pre_arr, rec_arr, 'ro')
-plt.show()
-    
+# plt.plot(pre_arr, rec_arr, 'ro')
+# plt.show()
+# precision_at(20,'print')
+
+print pre_arr
+print rec_arr    

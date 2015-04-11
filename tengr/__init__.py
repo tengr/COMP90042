@@ -6,8 +6,6 @@ import os
 from nltk.stem import PorterStemmer
 from nltk.tokenize import *
 from nltk.corpus import stopwords   
-from pip._vendor.requests.packages.chardet.latin1prober import FREQ_CAT_NUM
-from cmath import log
 import pickle
 import cPickle
 

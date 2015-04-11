@@ -2,16 +2,18 @@ import cPickle
 import os
 from nltk.stem import PorterStemmer
 import math
+import re
 
-q_num = {}
-num = 0
-with open("/Users/ruichen/Documents/COMP90042/proj1/proj1data/06.topics.851-900.txt","r") as query_file:
-    for line in query_file:
-        if "<num>" in line:
-            num = int(line.split()[-1])
-        elif "<title>" in line:
-            query = line.replace('<title>','').replace('"','').strip()
-            q_num[query] = num
+def load_queries():
+    q_num = {}
+    with open("/Users/ruichen/Documents/COMP90042/proj1/proj1data/06.topics.851-900.txt","r") as query_file:
+        for line in query_file:
+            if "<num>" in line:
+                num = int(line.split()[-1])
+            elif "<title>" in line:
+                query = line.replace('<title>','').replace('"','').strip()
+                q_num[query] = num
+    return q_num
         
 dic = cPickle.load(open("dic.dat",'r'))
 stemmer = PorterStemmer()
@@ -33,12 +35,11 @@ for word in dic:
 
 ranking_file = open('rankings.txt', 'w')
 
-
+q_num = load_queries()
 for each_query in q_num:
     print each_query + "\t" + str(q_num[each_query])
     score = {}
-    terms = each_query.lower().split()
-    
+    terms = re.sub(r"[\W]", " ", each_query).lower().strip().split()    
     for term in terms:
         word = stemmer.stem(term)
         if word in dic:
