@@ -1,40 +1,26 @@
+import re
 from nltk.stem import PorterStemmer
-from build_load import * 
-# ans = {} 
-# res = {}
-# posdic = {}
-# q_num = {}
+from build_load import load_queries, load_ii_pos
 
 q_num = load_queries()
-print q_num
+posdic = load_ii_pos()
 
-#posdic = load_posdic()
-
-# print len(posdic)
-# stemmer = PorterStemmer()
-# dirname = "/Users/ruichen/Documents/COMP90042/proj1/proj1data/blogs/"   
-# filenames = [f for f in os.listdir(dirname) if os.path.isfile(dirname + f) and os.path.getsize(dirname + f) > 0 ]
-
-
-
-
-# for each_query in q_num:
-#     #print each_query + "\t" + str(q_num[each_query])
-#     terms = re.sub(r"[\W]", " ", each_query).lower().strip().split()
-#     print posdic    
-#     if len(terms > 0):
-#         subdic = {}
-#         word_df = {}
-#         words = []
-#         for term in terms:
-#             word = stemmer.stem(term)
-#             if word in posdic:
-#                 subdic[word] = posdic[word]
-#                 word_df[word] = len(posdic[word])
-#                 words.append(word)
-#             else:
-#                 break
-#     if len(words) == len(terms):
+for each_query in q_num:
+    #print each_query + "\t" + str(q_num[each_query])
+    terms = re.sub(r"[\W]", " ", each_query).lower().strip().split()
+    if len(terms > 0): #exclude single word queries
+        subdic = {}
+        word_df = {}
+        words = []
+        for term in terms:
+            word = stemmer.stem(term)
+            if word in posdic:
+                subdic[word] = posdic[word]
+                word_df[word] = len(posdic[word])
+                words.append(word)
+            else:
+                break
+    if len(words) == len(terms):
         
 # 
 # with open('/Users/ruichen/Documents/COMP90042/proj1/proj1data/qrels.february','r') as f1:
