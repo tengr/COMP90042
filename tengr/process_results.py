@@ -89,29 +89,29 @@ def get_results(f_name):
                 res[query_num] = [f_name]
     return res
 
-pre_arr_vsm = [] 
-rec_arr_vsm = [] 
-pre_arr_bi = []
-rec_arr_bi = []
-ans_vsm = get_all_answers()
-ans_bi = get_phrase_answers()
-res_vsm = get_results('vsm_rankings.txt')
-res_bi = get_results("bi_rankings.txt")         
-for i in xrange(10,100):
-    pre_arr_vsm.append(precision_at(ans_vsm, res_vsm, i, ''))
-    rec_arr_vsm.append(recall_at(ans_vsm, res_vsm, i, ''))
-    pre_arr_bi.append(precision_at(ans_bi,res_bi, i, ''))
-    rec_arr_bi.append(recall_at(ans_bi, res_bi, i, ''))
-# plt.plot(pre_arr, rec_arr, 'ro')
-
-plt.scatter(pre_arr_vsm, rec_arr_vsm, color='k')
-plt.scatter(pre_arr_bi, rec_arr_bi, color='g')
-
-plt.show()
+# pre_arr_vsm = [] 
+# rec_arr_vsm = [] 
+# pre_arr_bi = []
+# rec_arr_bi = []
+# ans_vsm = get_all_answers()
+# ans_bi = get_phrase_answers()
+# res_vsm = get_results('vsm_rankings.txt')
+# res_bi = get_results("bi_rankings.txt")         
+# for i in xrange(10,100):
+#     pre_arr_vsm.append(precision_at(ans_vsm, res_vsm, i, ''))
+#     rec_arr_vsm.append(recall_at(ans_vsm, res_vsm, i, ''))
+#     pre_arr_bi.append(precision_at(ans_bi,res_bi, i, ''))
+#     rec_arr_bi.append(recall_at(ans_bi, res_bi, i, ''))
+# # plt.plot(pre_arr, rec_arr, 'ro')
+# 
+# plt.scatter(pre_arr_vsm, rec_arr_vsm, color='k')
+# plt.scatter(pre_arr_bi, rec_arr_bi, color='g')
+# 
+# plt.show()
  
 
-# ans = get_phrase_answers()
+ans = get_phrase_answers()
 # 
-# res = get_results("bi_rankings.txt")
+res = get_results("pos_rankings.txt")
 # 
-# recall_at(ans, res, 30000, "print")   
+precision_at(ans, res, 20, "print")   
