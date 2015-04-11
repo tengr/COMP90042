@@ -1,23 +1,16 @@
 from nltk.stem import PorterStemmer
-import os
-import cPickle
-from tengr.io import *
-from tengr import io
-#global variables
+from build_load import * 
 # ans = {} 
 # res = {}
 # posdic = {}
 # q_num = {}
 
-def load_posdic():
-    return cPickle.load(open("posdic.dat",'r'))
-
-io()
+q_num = load_queries()
+print q_num
 
 #posdic = load_posdic()
 
 # print len(posdic)
-print "test"
 # stemmer = PorterStemmer()
 # dirname = "/Users/ruichen/Documents/COMP90042/proj1/proj1data/blogs/"   
 # filenames = [f for f in os.listdir(dirname) if os.path.isfile(dirname + f) and os.path.getsize(dirname + f) > 0 ]

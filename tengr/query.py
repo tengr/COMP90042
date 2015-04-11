@@ -3,25 +3,16 @@ import os
 from nltk.stem import PorterStemmer
 import math
 import re
+from  build_load import *
 
-def load_queries():
-    q_num = {}
-    with open("/Users/ruichen/Documents/COMP90042/proj1/proj1data/06.topics.851-900.txt","r") as query_file:
-        for line in query_file:
-            if "<num>" in line:
-                num = int(line.split()[-1])
-            elif "<title>" in line:
-                query = line.replace('<title>','').replace('"','').strip()
-                q_num[query] = num
-    return q_num
-        
-dic = cPickle.load(open("dic.dat",'r'))
+dic = load_ii_vsm()
+q_num = load_queries()
+
 stemmer = PorterStemmer()
 dirname = "/Users/ruichen/Documents/COMP90042/proj1/proj1data/blogs/"   
 filenames = [f for f in os.listdir(dirname) if os.path.isfile(dirname + f) and os.path.getsize(dirname + f) > 0 ]
 N = len(filenames)
 doc_len = {}
-
 
 for word in dic:
     nt = len(dic[word])
@@ -35,7 +26,6 @@ for word in dic:
 
 ranking_file = open('rankings.txt', 'w')
 
-q_num = load_queries()
 for each_query in q_num:
     print each_query + "\t" + str(q_num[each_query])
     score = {}

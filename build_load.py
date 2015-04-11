@@ -1,4 +1,5 @@
 #build and load inverted index for vector space model and positional index
+#process query file into a dictionary object
 import nltk
 import re
 import os
@@ -51,7 +52,6 @@ def build_ii_pos():
                     posdic[word][filename] = [i]
     cPickle.dump(posdic,open(ii_pos,'w'), cPickle.HIGHEST_PROTOCOL)
         
-        
 def load_ii_vsm():
     if not os.path.isfile(ii_vsm):
         build_ii_vsm()
@@ -61,3 +61,14 @@ def load_ii_pos():
     if not os.path.isfile(ii_vsm):
         build_ii_pos()
     return cPickle.load(open(ii_pos,'r'))
+
+def load_queries():
+    q_num = {}
+    with open("/Users/ruichen/Documents/COMP90042/proj1/proj1data/06.topics.851-900.txt","r") as query_file:
+        for line in query_file:
+            if "<num>" in line:
+                num = int(line.split()[-1])
+            elif "<title>" in line:
+                query = line.replace('<title>','').replace('"','').strip()
+                q_num[query] = num
+    return q_num
