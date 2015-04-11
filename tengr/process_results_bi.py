@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
-def precision_at(ans, res, n, cmd):
+ans = {} 
+res = {}
+def precision_at(n, cmd):
     TP = 0
-    ans = get_answers()
-    for query_num in ans:
+    for query_num in res:
         resN = res[query_num][:n] #top N of result res[]
         numRel = len( set(resN) & set(ans[query_num]) )
         TP += numRel
@@ -17,10 +18,9 @@ def precision_at(ans, res, n, cmd):
         print "overall precision = " + str(precision)
     return precision
 
-def recall_at(ans, res, n, cmd):
-    ans = get_answers()
+def recall_at(n, cmd):
     TP = 0
-    for query_num in ans:
+    for query_num in res:
         resN = res[query_num][:n] #top N of result res[]
         numRel = len( set(resN) & set(ans[query_num]) )
         TP += numRel
@@ -41,33 +41,29 @@ def plot_arr(arr, xlbl, ylbl):
     plt.xlabel('top')
     plt.show()
 
-def get_answers():
-    ans = {} 
-    with open('/Users/ruichen/Documents/COMP90042/proj1/proj1data/qrels.february','r') as f:
-        for line in f:
-            arr = line.split()
-            query_num = arr[0]
-            relevance = int(arr[-1])
-            filename = arr[2]
-            if relevance >= 1:
-                if query_num in ans:
-                    ans[query_num].append(filename)
-                else:
-                    ans[query_num] = [filename]
-    return ans
-
-def get_results(f_name):
-    res = {}
-    with open('/Users/ruichen/Documents/workspace/IR/tengr/' + f_name, 'r') as f:
-        for line in f:
-            arr = line.split()
-            query_num = arr[0]
-            filename = arr[2].replace(".txt", "")
-            if query_num in res:
-                res[query_num].append(filename)
+with open('/Users/ruichen/Documents/COMP90042/proj1/proj1data/qrels.february','r') as f1:
+    for line in f1:
+        arr = line.split()
+        query_num = arr[0]
+        relevance = int(arr[-1])
+        filename = arr[2]
+        if relevance >= 1:
+            if query_num in ans:
+                ans[query_num].append(filename)
             else:
-                res[query_num] = [filename]
-    return res
+                ans[query_num] = [filename]
+
+
+
+with open('/Users/ruichen/Documents/workspace/IR/tengr/bi_rankings.txt', 'r') as f2:
+    for line in f2:
+        arr = line.split()
+        query_num = arr[0]
+        filename = arr[2].replace(".txt", "")
+        if query_num in res:
+            res[query_num].append(filename)
+        else:
+            res[query_num] = [filename]
 
 # pre_arr = [] 
 # rec_arr = []           
@@ -79,9 +75,5 @@ def get_results(f_name):
 # # precision_at(20,'print')
 # 
 # print pre_arr
-# print rec_arr 
-
-ans = get_answers()
-res = get_results("rankings.txt")
-
-precision_at(ans, res, 10, "print")   
+# print rec_arr    
+precision_at(1000,'print')
