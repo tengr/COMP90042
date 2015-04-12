@@ -48,7 +48,7 @@ for each_query in q_num:
                 posdiff = nextterm_i - lstfreterm_i
                 for doc_id in lstfreterm_pos:
                     if doc_id in nextterm_pos:
-                        doc_positions[doc_id] = list(set(lstfreterm_pos[doc_id]).intersection(set(map(lambda x:x-nextterm_i,nextterm_pos[doc_id]))))
+                        doc_positions[doc_id] = list(set(lstfreterm_pos[doc_id]).intersection(set(map(lambda x:x-posdiff,nextterm_pos[doc_id]))))
                         if len(doc_positions[doc_id]) == 0:
                             doc_positions.pop(doc_id)
                     elif doc_id in doc_positions:#there are query words not in this document, won't be considered anymore

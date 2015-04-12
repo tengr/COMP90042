@@ -7,6 +7,7 @@ from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 import cPickle
 from collections import Counter
+import time
 
 stemmer = PorterStemmer()
 dirname = "/Users/ruichen/Documents/COMP90042/proj1/proj1data/blogs/"
@@ -38,6 +39,30 @@ def build_ii_vsm():
                         dic[word] = {}
                         dic[word][f_name] = 1
     cPickle.dump(dic,open(ii_vsm,'w'), cPickle.HIGHEST_PROTOCOL)
+    
+def build_ii_vsm_fast():
+    word_tf = {}
+    word_fid = {}
+    for f_name in f_names:
+        with open(dirname + f_name,'r') as f:
+            text = re.sub(r"[\W]", " ", f.read())
+            tokens = nltk.word_tokenize(text.lower())
+            fid = f_names.index(f_name)
+            for token in tokens:
+                if token not in stopset: #comment this line time becomes 5:57
+                    word = stemmer.stem(token.decode('utf8', 'ignore'))
+                    if word in word_tf:
+                        if fid in word_fid[word]:
+                            word_tf[word][-1] += 1
+                        else:
+                            word_tf[word].append(1)
+                            word_fid[word].append(fid) 
+                    else: 
+                        word_tf[word] = [1]
+                        word_fid[word] = [fid]
+    cPickle.dump(word_fid,open("word_fid.dat",'w'), cPickle.HIGHEST_PROTOCOL)
+    cPickle.dump(word_tf,open("word_tf.dat",'w'), cPickle.HIGHEST_PROTOCOL)
+
 
 def build_ii_pos():
     posdic = {}
@@ -110,3 +135,8 @@ def check_queries():
         len_list.append(len(q.split()))
     return Counter(len_list)
 
+def time_it(some_method):
+    start_time = time.time()
+    some_method()
+    return time.time() - start_time
+print("--- %s seconds ---" %  time_it((build_ii_vsm_fast)))

@@ -114,4 +114,4 @@ ans = get_phrase_answers()
 # 
 res = get_results("pos_rankings.txt")
 # 
-precision_at(ans, res, 20, "print")   
+precision_at(ans, res, 100, "print")   
