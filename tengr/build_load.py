@@ -14,7 +14,7 @@ dirname = "/Users/ruichen/Documents/COMP90042/proj1/proj1data/blogs/"
 f_names = [f for f in os.listdir(dirname) if os.path.isfile(dirname + f) and os.path.getsize(dirname + f) > 0 ]
 stopset = set(stopwords.words('english'))
 
-ii_vsm = 'dic.dat'
+ii_vsm = 'vsmdic.dat'
 ii_pos = 'posdic.dat'
 ii_bi = 'bidic.dat'
 
@@ -139,4 +139,4 @@ def time_it(some_method):
     start_time = time.time()
     some_method()
     return time.time() - start_time
-print("--- %s seconds ---" %  time_it((build_ii_vsm_fast)))
+#print("--- %s seconds ---" %  time_it((build__ii_vsm)))

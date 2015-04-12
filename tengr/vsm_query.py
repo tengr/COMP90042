@@ -15,8 +15,9 @@ doc_lensq = {}
 for word in dic:
     nt = len(dic[word])
     for doc, freq in dic[word].iteritems():
-        idf = 1.0 / nt
-        tfidf = freq * idf
+        tf = math.log(1 + freq)
+        idf = math.log(1.0 * N / nt)
+        tfidf = tf * idf
         if doc not in doc_lensq:
             doc_lensq[doc] = tfidf ** 2
         else:
@@ -33,8 +34,9 @@ for each_query in q_num:
         if word in dic:
             nt = len(dic[word])
             for doc, freq in dic[word].iteritems():
-                idf = 1.0 / nt
-                tfidf = freq * idf
+                tf = math.log(1 + freq)
+                idf = math.log(1.0 * N / nt)
+                tfidf = tf * idf
                 if doc not in score:
                     score[doc] = tfidf
                 else:

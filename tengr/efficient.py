@@ -55,7 +55,6 @@ save_word_fileid()
 save_word_freq()
 # print word_fileid
 # print word_freq
-
 duration = time.time() - start_time
 print("--- %s seconds ---" % (duration))
 

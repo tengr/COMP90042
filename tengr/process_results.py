@@ -110,8 +110,8 @@ def get_results(f_name):
 # plt.show()
  
 
-ans = get_phrase_answers()
-# 
-res = get_results("pos_rankings.txt")
-# 
-precision_at(ans, res, 100, "print")   
+ans = get_all_answers()
+# # 
+res = get_results("roch_vsm_rankings_100.txt")
+# # 
+precision_at(ans, res, 20, "print")   
