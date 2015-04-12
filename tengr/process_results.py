@@ -112,6 +112,6 @@ def get_results(f_name):
 
 ans = get_all_answers()
 # # 
-res = get_results("roch_vsm_rankings_100.txt")
+res = get_results("pivot_vsm_rankings.txt")
 # # 
 precision_at(ans, res, 20, "print")   

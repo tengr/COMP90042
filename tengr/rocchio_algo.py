@@ -23,7 +23,6 @@ dirname = "/Users/ruichen/Documents/COMP90042/proj1/proj1data/blogs/"
 stemmer = PorterStemmer()
 stopset = set(stopwords.words('english'))
 N = len(f_names)
-doc_lensq = {}
 #ranking_file = open('rocchio_vsm_rankings.txt', 'w')
 doc_len = {}
 doc_vec = {}
@@ -59,11 +58,11 @@ def get_doc_len(f_name):
         doc_len[f_name] = math.sqrt(l)
     return doc_len[f_name]
 
-def build_num_qe():
+def build_num_qe(Dr):
     num_qe = {}
     for q in q_num:
         num = q_num[q]
-        print q + "\t" + str(num)
+        #print q + "\t" + str(num)
         terms = nltk.word_tokenize(re.sub(r"[\W]", " ", q.lower()))           
         q0dic = {}
         for term in terms:
@@ -74,7 +73,7 @@ def build_num_qe():
         alphaq0 = Counter(q0dic)
         #Dr = len(res[num]) #number of relevant documents
         #print "Dr = " + str(Dr)
-        Dr = 100
+        #Dr = 100
         #print "Dr = " + str(Dr)
         sum_docvec = Counter()
         for name in res[num][:Dr]:
@@ -91,30 +90,29 @@ def build_num_qe():
         num_qe[num] = qe
         #print qe.values()[0]
         #break
-    cPickle.dump(num_qe, open('num_qe.dat','w',cPickle.HIGHEST_PROTOCOL))
+    cPickle.dump(num_qe, open(str(Dr) + 'num_qe.dat','w',cPickle.HIGHEST_PROTOCOL))
 
-def load_num_qe():
-    if not os.path.isfile('num_qe.dat'):
-        build_num_qe()
-    return cPickle.load(open('num_qe.dat','r'))
+def load_num_qe(Dr):
+    if not os.path.isfile(str(Dr) + 'num_qe.dat'):
+        build_num_qe(Dr)
+    return cPickle.load(open(str(Dr) + 'num_qe.dat','r'))
 
-def get_qe_len(num):
-    weights = num_qe[num].values()
-    l = 0.0
-    for weight in weights:
-        l += weight
-    return math.sqrt(l)
+# def get_qe_len(num):
+#     weights = num_qe[num].values()
+#     l = 0.0
+#     for weight in weights:
+#         l += weight
+#     return math.sqrt(l)
 
-def prod_doc_qe(f_name, qenum):
-    docvec = dict(get_doc_vec(f_name))
-    s = 0.0
-    for word in num_qe[qenum]:
-        if word in docvec:
-            s += num_qe[qenum][word] * docvec[word]
-    return s / (get_doc_len(f_name) * get_qe_len(qenum))
+# def prod_doc_qe(f_name, qenum):
+#     docvec = dict(get_doc_vec(f_name))
+#     s = 0.0
+#     for word in num_qe[qenum]:
+#         if word in docvec:
+#             s += num_qe[qenum][word] * docvec[word]
+#     return s / (get_doc_len(f_name) * get_qe_len(qenum))
 #getting the updated query vectors
 
-num_qe = load_num_qe()
 #print num_qe
 
 # for num in num_qe:
@@ -129,41 +127,56 @@ num_qe = load_num_qe()
 #     for doc in sorted_docs:
 #         ranking_file.write(str(num) + " 0 " + doc + " " + str(score[doc]) + "\n" ) 
 
-for word in dic:
-    nt = len(dic[word])
-    for doc, freq in dic[word].iteritems():
-        tf = math.log(1 + freq)
-        idf = math.log(1.0 * N / nt)
-        tfidf = tf * idf
-        if doc not in doc_lensq:
-            doc_lensq[doc] = tfidf ** 2
-        else:
-            doc_lensq[doc] += tfidf ** 2
-
-ranking_file = open('roch_vsm_rankings.txt', 'w')
-
-for each_query in q_num:
-    print each_query + "\t" + str(q_num[each_query])
-    num = q_num[each_query]
-    qe = num_qe[num]
-    score = {}
-    for word in num_qe[num]:
-        if word in dic:
-            nt = len(dic[word])
-            for doc, freq in dic[word].iteritems():
-                tf = math.log(1 + freq)
-                idf = math.log(1.0 * N / nt)
-                tfidf = tf * idf
-                w = tfidf * qe[word]
-                if doc not in score:
-                    score[doc] = w
-                else:
-                    score[doc] += w
+def build_doc_lensq():
+    doc_lensq = {}
+    for word in dic:
+        nt = len(dic[word])
+        for doc, freq in dic[word].iteritems():
+            tf = math.log(1 + freq)
+            idf = math.log(1.0 * N / nt)
+            tfidf = tf * idf
+            if doc not in doc_lensq:
+                doc_lensq[doc] = tfidf ** 2
+            else:
+                doc_lensq[doc] += tfidf ** 2
     
-    for doc in score:
-        score[doc] /= math.sqrt(doc_lensq[doc])
+    cPickle.dump(doc_lensq, open('doc_lensq.dat','w',cPickle.HIGHEST_PROTOCOL))
+
+def load_doc_lensq():
+    if not os.path.isfile('doc_lensq.dat'):
+        build_doc_lensq()
+    return cPickle.load(open('doc_lensq.dat','r'))
+
+def g_rankings(Dr):
+    num_qe = load_num_qe(Dr)
+    doc_lensq = load_doc_lensq()
+    ranking_file = open(str(Dr) + 'roch_vsm_rankings.txt', 'w')
+    
+    for each_query in q_num:
+        #print each_query + "\t" + str(q_num[each_query])
+        num = q_num[each_query]
+        qe = num_qe[num]
+        score = {}
+        for word in qe:
+            if word in dic:
+                nt = len(dic[word])
+                for doc, freq in dic[word].iteritems():
+                    tf = math.log(1 + freq)
+                    idf = math.log(1.0 * N / nt)
+                    tfidf = tf * idf
+                    w = tfidf * qe[word]
+                    if doc not in score:
+                        score[doc] = w
+                    else:
+                        score[doc] += w
         
-    sorted_docs = sorted(score, key=score.get, reverse=True)
-    
-    for doc in sorted_docs:
-        ranking_file.write(str(q_num[each_query]) + " 0 " + doc + " " + str(score[doc]) + "\n" ) 
+        for doc in score:
+            score[doc] /= math.sqrt(doc_lensq[doc])
+            
+        sorted_docs = sorted(score, key=score.get, reverse=True)
+        
+        for doc in sorted_docs:
+            ranking_file.write(str(q_num[each_query]) + " 0 " + doc + " " + str(score[doc]) + "\n" ) 
+
+for i in xrange(10,51):
+    g_rankings(i)
