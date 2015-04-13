@@ -109,9 +109,9 @@ def get_results(f_name):
 # 
 # plt.show()
  
-
-ans = get_all_answers()
-# # 
-res = get_results("pivot_vsm_rankings.txt")
-# # 
-precision_at(ans, res, 20, "print")   
+ 
+# ans = get_all_answers()
+# # # 
+# res = get_results("combined_rankings.txt")
+# # # 
+# precision_at(ans, res, 1000, "print")   
