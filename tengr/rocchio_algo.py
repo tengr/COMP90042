@@ -14,7 +14,7 @@ q_num = load_queries()
 #print q_num
 #print q_num.keys()
 f_names = get_f_names()
-res = get_results('combined_rankings.txt')
+res = get_results('vsm_rankings.txt')
 dic = load_ii_vsm()
 alpha = 0.5
 beta = 0.5
@@ -180,4 +180,3 @@ def g_rankings(Dr):
 
 # for i in xrange(10,51):
 #     g_rankings(i)
-g_rankings(20)

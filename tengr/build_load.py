@@ -28,6 +28,7 @@ def build_ii_vsm():
             text = re.sub(r"[\W]", " ", f.read())
             tokens = nltk.word_tokenize(text.lower())
             for token in tokens:
+                word = token
                 if token not in stopset: #comment this line time becomes 5:57
                     word = stemmer.stem(token.decode('utf8', 'ignore'))
                     if word in dic:
@@ -62,7 +63,6 @@ def build_ii_vsm_fast():
                         word_fid[word] = [fid]
     cPickle.dump(word_fid,open("word_fid.dat",'w'), cPickle.HIGHEST_PROTOCOL)
     cPickle.dump(word_tf,open("word_tf.dat",'w'), cPickle.HIGHEST_PROTOCOL)
-
 
 def build_ii_pos():
     posdic = {}

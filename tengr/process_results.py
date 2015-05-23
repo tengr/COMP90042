@@ -89,29 +89,85 @@ def get_results(f_name):
                 res[query_num] = [f_name]
     return res
 
-# pre_arr_vsm = [] 
-# rec_arr_vsm = [] 
-# pre_arr_bi = []
-# rec_arr_bi = []
-# ans_vsm = get_all_answers()
-# ans_bi = get_phrase_answers()
-# res_vsm = get_results('vsm_rankings.txt')
-# res_bi = get_results("bi_rankings.txt")         
-# for i in xrange(10,100):
-#     pre_arr_vsm.append(precision_at(ans_vsm, res_vsm, i, ''))
-#     rec_arr_vsm.append(recall_at(ans_vsm, res_vsm, i, ''))
-#     pre_arr_bi.append(precision_at(ans_bi,res_bi, i, ''))
-#     rec_arr_bi.append(recall_at(ans_bi, res_bi, i, ''))
-# # plt.plot(pre_arr, rec_arr, 'ro')
-# 
-# plt.scatter(pre_arr_vsm, rec_arr_vsm, color='k')
-# plt.scatter(pre_arr_bi, rec_arr_bi, color='g')
-# 
-# plt.show()
+pre_arr_vsm = [] 
+rec_arr_vsm = [] 
+pre_arr_ro = []
+rec_arr_ro = []
+pre_arr_lm = []
+rec_arr_lm = []
+pre_arr_piv = []
+rec_arr_piv = []
+ans = get_all_answers()
+#ans_bi = get_phrase_answers()
+res_vsm = get_results('vsm_rankings.txt')
+res_ro = get_results("10roch_vsm_rankings.txt")
+res_lm = get_results("lm_vsm_rankings.txt")
+res_piv = get_results("pivot_vsm_rankings.txt")         
+for i in xrange(10,100):
+    pre_arr_vsm.append(precision_at(ans, res_vsm, i, ''))
+    rec_arr_vsm.append(recall_at(ans, res_vsm, i, ''))
+    pre_arr_ro.append(precision_at(ans,res_ro, i, ''))
+    rec_arr_ro.append(recall_at(ans, res_ro, i, ''))
+    pre_arr_lm.append(precision_at(ans,res_lm, i, ''))
+    rec_arr_lm.append(recall_at(ans, res_lm, i, ''))
+    pre_arr_piv.append(precision_at(ans,res_piv, i, ''))
+    rec_arr_piv.append(recall_at(ans, res_piv, i, ''))
+    
+for i in range(len(pre_arr_vsm)):
+    pre_arr_vsm[i] = max(pre_arr_vsm[i:])
+    rec_arr_vsm[i] = min(rec_arr_vsm[i:])
+    pre_arr_ro[i] = max(pre_arr_ro[i:])
+    rec_arr_ro[i] = min(rec_arr_ro[i:])
+    pre_arr_lm[i] = max(pre_arr_lm[i:])
+    rec_arr_lm[i] = min(rec_arr_lm[i:])
+    pre_arr_piv[i] = max(pre_arr_piv[i:])
+    rec_arr_piv[i] = min(rec_arr_piv[i:])
+
+plt.plot(rec_arr_vsm, pre_arr_vsm, 'k')
+plt.plot(rec_arr_ro, pre_arr_ro, color='b')
+plt.plot(rec_arr_piv, pre_arr_piv, color='r')
+plt.plot(rec_arr_lm, pre_arr_lm, color='g')
+
+plt.annotate('Original vsm', 
+             xy=(0.26, 0.58),  
+             xycoords='data',
+             textcoords='offset points',
+             color='b')
+
+plt.annotate('Rocchio\'s Algo', 
+             xy=(0.26, 0.56),  
+             xycoords='data',
+             textcoords='offset points',
+            color='b')
+
+plt.annotate('Pivoted doc length', 
+             xy=(0.26, 0.54),  
+             xycoords='data',
+             textcoords='offset points',
+            color='r')
+
+plt.annotate('Language model', 
+             xy=(0.26, 0.52),  
+             xycoords='data',
+             textcoords='offset points',
+            color='g')
+
+
+plt.xlabel('Interpolated recall')
+plt.ylabel('Interpolated precision')
+
+plt.show()
+
+
+    
  
- 
+#   
 # ans = get_all_answers()
-# # # 
-# res = get_results("combined_rankings.txt")
-# # # 
-# precision_at(ans, res, 1000, "print")   
+# # # # 
+# res = get_results("nsns_vsm_rankings.txt")
+# # # # 
+# precision_at(ans, res, 10, "print")   
+
+# ans = get_all_answers()
+# for num in ans:
+#     print str(num) + "\t" + str(len(ans[num]))
